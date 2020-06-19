@@ -67,5 +67,6 @@ tasks.withType(Javadoc) {
 
 tasks.withType(Test)*.doFirst {
     systemProperty 'allure.results.directory', 'build/allure-results'
+    systemProperty 'selenide.browser', System.getProperty('selenide.browser')
 }
 

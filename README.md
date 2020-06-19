@@ -13,6 +13,12 @@ Test framework is based on:
 $ gradle clean test
 ```
 
+To change default 'chrome' browser run the same command with *-Dselenide.browser* flag
+
+  ```sh
+$ gradle -Dselenide.browser=firefox clean test
+```
+
 You can also generate Allure report after tests execution, just execute next command:
  ```sh
 $ gradle allureReport

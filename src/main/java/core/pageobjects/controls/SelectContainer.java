@@ -5,6 +5,8 @@ import com.codeborne.selenide.SelenideElement;
 import core.helpers.Log;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.Objects;
+
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -30,5 +32,10 @@ public class SelectContainer {
         getOptions().shouldHave(sizeGreaterThan(0)).filter(text(option)).first().click();
         getSelectContainer().shouldNotBe(visible);
         Log.info("Select option from autocomplete block: " + option);
+    }
+
+    public boolean isOptionPresent() {
+        getSelectContainer().shouldBe(visible);
+        return !Objects.equals(getOptions().size(), 0);
     }
 }

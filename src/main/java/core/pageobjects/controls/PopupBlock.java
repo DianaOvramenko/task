@@ -3,8 +3,10 @@ package core.pageobjects.controls;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import core.helpers.Log;
-import io.qameta.allure.Story;
+import io.qameta.allure.Step;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.Objects;
 
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.*;
@@ -26,6 +28,9 @@ public class PopupBlock {
 
     @FindBy(css = ".sm-popup__body div span")
     private ElementsCollection options;
+
+    @FindBy(css = ".citySelect__emptySearch")
+    private SelenideElement errorMessage;
 
     private SelectContainer getSelectContainer() {
         return page(SelectContainer.class);
@@ -51,6 +56,10 @@ public class PopupBlock {
         return submitSearchButton;
     }
 
+    public SelenideElement getErrorMessage() {
+        return errorMessage;
+    }
+
     public void selectOption(String option) {
         getPopup().shouldBe(visible);
         getOptions().shouldHave(sizeGreaterThan(0));
@@ -59,15 +68,24 @@ public class PopupBlock {
         Log.info("Select option from popup: " + option);
     }
 
-    @Story("Search for option: {0}, on popup")
+    @Step("Search for option: {0}, on popup")
     public void searchOption(String option, String optionAutoComplete) {
-        getPopup().shouldBe(visible);
-        getSearchInput().shouldBe(visible, enabled).setValue(option);
-        Log.info("Search for option: " + option);
+        populateSearchField(option);
         getSelectContainer().selectOption(optionAutoComplete);
         getPopupHeaderText().shouldHave(text(option));
         getSubmitSearchButton().shouldBe(visible, enabled).click();
         getPopup().shouldNotBe(visible);
         Log.info("Submit popup");
+    }
+
+    @Step("Populate Search field")
+    public boolean populateSearchField(String option) {
+        getPopup().shouldBe(visible);
+        getSearchInput().shouldBe(visible, enabled).setValue(option);
+        getSearchInput().shouldHave(value(option));
+        Log.info("Search for option: " + option);
+        if (Objects.equals(getSelectContainer().getOptions().size(), 0)
+                && getErrorMessage().is(visible)) return false;
+        return getSelectContainer().isOptionPresent();
     }
 }

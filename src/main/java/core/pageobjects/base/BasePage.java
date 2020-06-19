@@ -27,4 +27,10 @@ public class BasePage {
         getHeader().getChangeCityLink().shouldHave(text(city.toString()));
         Log.info("Change user location: " + city.toString());
     }
+
+    @Step("Check location search autocomplete suggestions have options")
+    public boolean checkLocationSearch(String option){
+        getHeader().getChangeCityLink().shouldBe(visible).click();
+        return getPopup().populateSearchField(option);
+    }
 }
