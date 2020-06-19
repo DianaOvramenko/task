@@ -26,6 +26,7 @@ buildscript {
 }
 
 dependencies {
+
     compile group: 'com.codeborne', name: 'selenide', version: '5.12.2'
     compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
     compile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
@@ -48,10 +49,16 @@ allure {
 test {
     systemProperty "file.encoding", "utf-8"
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    options.compilerArgs += '-parameters'
 }
 
 tasks.withType(Javadoc) {

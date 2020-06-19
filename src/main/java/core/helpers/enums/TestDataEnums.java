@@ -16,7 +16,7 @@ public class TestDataEnums {
         }
 
         public String getLocation() {
-            return location;
+            return this.location;
         }
 
         @Override
